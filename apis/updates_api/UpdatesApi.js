@@ -3,7 +3,7 @@ const fs = require('fs')
 const connection = require('../config')
 require('dotenv').config()
 // const api_ip = process.env.domainip
-const api_ip = 'https://api.jntugv.edu.in'
+const api_ip = 'http://localhost:8888'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb )=>{
@@ -22,9 +22,8 @@ exports.insert_event =  (req, res) => {
   const  file  = req.file;
   console.log(update)
   console.log("File"+file.originalname)
-  const int = 0;
-  const sql = 'INSERT INTO nss_notification_updates (id, date, title,  file_path) VALUES (?, ?, ?, ?)';
-  const values = [int, update.date, update.title,  file.originalname];
+  const sql = 'INSERT INTO nss_notification_updates ( date, title,  file_path) VALUES (?, ?, ?)';
+  const values = [update.date, update.title,  file.originalname];
   console.log({values})
   connection.query(sql, values, (err, result) => {
     if (err) {
