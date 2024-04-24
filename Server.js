@@ -6,14 +6,15 @@ require('dotenv').config()
 const schemas = require("../Backend_Console/Schemes/AllSchemas");
 const admins = require("../Backend_Console/routes/admin_routes/AdminRoute");
 const updates = require("../Backend_Console/routes/updates_routes/upates_api_routes");
-const downloads=require("../Backend_Console/routes/download_routes/download_routes")
+const downloads=require("../Backend_Console/routes/download_routes/download_routes");
+const latestnews=require("../Backend_Console/routes/latestnews_routes/latestnews_routes");
 //middle ware import
 app.use(express.json());
 
 const session = require("express-session");
 const bodyparser = require("body-parser");
 const cookieparser = require("cookie-parser");
-const con = require("../project4-2/Controllers/src/Backend/apis/config");
+const con = require("../Backend_Console/apis/config");
 app.use(express.json());
 app.use(cors());
 
@@ -35,10 +36,13 @@ app.use(
 
 app.use("/media", express.static("./storage/nss_notifications"));
 app.use("/downloads", express.static("./storage/nss_downloads"));
+app.use("/latestnews", express.static("./storage/nss_latestnews"));
+
 //apis start
 app.use("/api/admins", admins);
 app.use("/api/updates", updates);
-app.use("/api/downloads",downloads)
+app.use("/api/downloads",downloads);
+app.use("/api/latestnews",latestnews);
 
 // server listener
 const port = 8888;

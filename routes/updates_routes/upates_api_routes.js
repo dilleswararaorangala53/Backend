@@ -12,6 +12,6 @@ router.get('/every-events',updates.every_events); //api for only admin update ev
 
 router.post('/add-event',updates.Upload,updates.insert_event)
 
-router.get('/remove-event/:id',updates.delete_event)
+router.post('/remove-event',updates.delete_event)
 
 module.exports=router

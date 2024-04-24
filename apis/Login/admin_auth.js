@@ -39,12 +39,12 @@ exports.login=(req,res) => {
       else{
         if(result.length>0){
           if(password == result[0].password){
-            console.log({result})
+            //console.log({result})
             // console.log(req.session.user)
             const role = result[0].role
             const admin_name = result[0].name
             console.log(role)
-            console.log(admin_name)
+            //console.log(admin_name)
             req.session.userid = role;
             res.send({islogin:true,role:role,admin:admin_name})
           }

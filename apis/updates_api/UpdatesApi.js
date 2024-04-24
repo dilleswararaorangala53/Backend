@@ -36,51 +36,42 @@ exports.insert_event =  (req, res) => {
   });
 };
 
-exports.delete_event=(req, res) => {
-  // const filepath = './storage/nss_notifications/'
-  const id = req.params.id;
-  const sel = `SELECT * FROM nss_notification_updates WHERE id = ${id}`;
+exports.delete_event = (req, res) => {
+  const id = req.body.id;
   const del = `DELETE FROM nss_notification_updates WHERE id = ${id}`;
   
-  connection.query(sel, (err, result) => {
+  connection.query(del, (err, result) => {
     if (err) {
       console.error('Error deleting data:', err);
       res.status(500).json({ error: 'Error deleting data' });
       return;
     }
     
-    const filepath = `./storage/nss_notifications/${result[0].file_path}`
-    
-    connection.query(del, (err,result)=>{
-      if(err){
-        console.log(err);
-        res.status(500).json({ error: 'No Records Found!' });
-        return;
-      }else{
-        fs.access(filepath, fs.constants.F_OK, (err) => {
-          if(err) {
-            res.json(err)
-            console.error('File does not exist');
-            return;
-          }
-        
-          fs.unlink(filepath, (err) => {
-            if (err) {
-              console.error('Error removing file:', err);
-              return;
-            }
-            console.log('File removed successfully');
-          });
-        });
-      }
-    });
+    if (result.affectedRows === 0) {
+      console.error('No Records Found');
+      res.status(404).json({ error: 'No Records Found' });
+      return;
+    }
+
+    if (result && result.length > 0 && result[0].file_path) {
+      const filepath = `./storage/nss_notifications/${result[0].file_path}`;
+
+      fs.unlink(filepath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error('Error removing file:', unlinkErr);
+          res.status(500).json({ error: 'Error removing file' });
+          return;
+        }
+        console.log('File removed successfully');
+      });
+    }
 
     console.log('Data deleted successfully');
     res.json({ message: 'Data deleted successfully'});
   });
-  
-  
 };
+
+
 
 
 
